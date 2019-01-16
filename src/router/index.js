@@ -2,8 +2,14 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 const Home = resolve => require(['@/views/Home'], resolve)
-const About = resolve => require(['@/views/About'], resolve)
-
+const Location = resolve => require(['@/views/Location'], resolve)
+const LngLat = resolve => require(['@/views/LngLat'], resolve)
+const Convert = resolve => require(['@/views/Convert'], resolve)
+const LocationGet = resolve => require(['@/views/LocationGet'], resolve)
+const Address = resolve => require(['@/views/Address'], resolve)
+const Marker = resolve => require(['@/views/Marker'], resolve)
+const Distance = resolve => require(['@/views/Distance'], resolve)
+const Area = resolve => require(['@/views/Area'], resolve)
 const Error404 = resolve => require(['@/views/error/Error404'], resolve)
 
 Vue.use(Router)
@@ -14,8 +20,36 @@ let routes = [
         component: Home
     },
     {
-        path: '/about',
-        component: About
+        path: '/location',
+        component: Location
+    },
+    {
+        path: '/distance',
+        component: Distance
+    },
+    {
+        path: '/area',
+        component: Area
+    },
+    {
+        path: '/lnglat',
+        component: LngLat
+    },
+    {
+        path: '/address',
+        component: Address
+    },
+    {
+        path: '/marker',
+        component: Marker
+    },
+    {
+        path: '/convert',
+        component: Convert
+    },
+    {
+        path: '/location_get',
+        component: LocationGet
     },
     {
         path: '*',
