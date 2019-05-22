@@ -1,30 +1,31 @@
 <template>
-    <my-page title="坐标转换">
-        <ui-text-field v-model="location" label="坐标" hintText="xxx, xxx" />
-        <br>
-        <ui-select-field class="select" v-model="from">
-            <ui-menu-item value="wgs84" title="wgs84 坐标"/>
-            <ui-menu-item value="gcj02" title="国测局坐标"/>
-            <ui-menu-item value="bd09" title="百度坐标"/>
-        </ui-select-field>
-        <span class="text">转</span>
-        <ui-select-field class="select" v-model="to">
-            <ui-menu-item value="wgs84" title="wgs84 坐标"/>
-            <ui-menu-item value="gcj02" title="国测局坐标"/>
-            <ui-menu-item value="bd09" title="百度坐标"/>
-        </ui-select-field>
-        <br>
-        <span>四舍五入保留</span>
-        <ui-text-field class="fixed-input" type="number" v-model.number="fixedNumber" />
-        <span>位</span>
-        <br>
-        <div class="btns">
-            <ui-raised-button primary label="转换" @click="convert" />
+    <my-page title="坐标转换" :page="page">
+        <div class="common-container container">
+            <ui-text-field v-model="location" label="坐标" hintText="xxx, xxx" />
+            <br>
+            <ui-select-field class="select" v-model="from">
+                <ui-menu-item value="wgs84" title="wgs84 坐标"/>
+                <ui-menu-item value="gcj02" title="国测局坐标"/>
+                <ui-menu-item value="bd09" title="百度坐标"/>
+            </ui-select-field>
+            <span class="text">转</span>
+            <ui-select-field class="select" v-model="to">
+                <ui-menu-item value="wgs84" title="wgs84 坐标"/>
+                <ui-menu-item value="gcj02" title="国测局坐标"/>
+                <ui-menu-item value="bd09" title="百度坐标"/>
+            </ui-select-field>
+            <br>
+            <span>四舍五入保留</span>
+            <ui-text-field class="fixed-input" type="number" v-model.number="fixedNumber" />
+            <span>位</span>
+            <br>
+            <div class="btns">
+                <ui-raised-button primary label="转换" @click="convert" />
+            </div>
+            <div class="result" v-if="result">{{ result[0] }}, {{ result[1] }}</div>
         </div>
-        <div class="result" v-if="result">{{ result[0] }}, {{ result[1] }}</div>
     </my-page>
 </template>
-
 
 <script>
     let coordtransform = require('coordtransform')
@@ -42,7 +43,9 @@
                         {
                             type: 'icon',
                             icon: 'help',
-                            to: '/help'
+                            href: 'https://project.yunser.com/products/fdb129105dc411e99da1c5fddb71d576',
+                            target: '_blank',
+                            title: '帮助'
                         }
                     ]
                 }
@@ -99,6 +102,9 @@
 </script>
 
 <style lang="scss" scoped>
+.container {
+    max-width: 400px;
+}
 .select {
     width: 130px;
 }

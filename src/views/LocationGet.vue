@@ -1,11 +1,13 @@
 <template>
-    <my-page title="坐标拾取">
-        <div class="map" id="container"></div>
-        <!-- <div class="location">{{ location }}</div> -->
-        <div id="panel"></div>
-        <div class="input-box">
-            <input id="tipinput" class="input" placeholder="输入关键词搜索">
-            <ui-icon-button class="btn" icon="search" @click="search" />
+    <my-page title="坐标拾取" :page="page">
+        <div class="common-container container">
+            <div class="map" id="container"></div>
+            <!-- <div class="location">{{ location }}</div> -->
+            <div id="panel"></div>
+            <div class="input-box">
+                <input id="tipinput" class="input" placeholder="输入关键词搜索">
+                <ui-icon-button class="btn" icon="search" @click="search" />
+            </div>
         </div>
     </my-page>
 </template>
@@ -25,10 +27,10 @@
                     menu: [
                         {
                             type: 'icon',
-                            icon: 'apps',
-                            href: 'https://app.yunser.com/',
+                            icon: 'help',
+                            href: 'https://project.yunser.com/products/cdaa52305dc611e99da1c5fddb71d576',
                             target: '_blank',
-                            title: '应用'
+                            title: '帮助'
                         }
                     ]
                 }
@@ -134,10 +136,12 @@
 
 <style lang="scss" scoped>
 @import '../scss/var';
-
+.container {
+    // position: relative;
+}
 .map {
     position: absolute;
-    top: 0;
+    top: 64px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -168,8 +172,9 @@
 }
 .input-box {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 80px;
+    right: 16px;
+    // left: 50%;
     z-index: 100000;
     width: 240px;
     height: 48px;

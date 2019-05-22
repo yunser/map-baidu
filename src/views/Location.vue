@@ -1,10 +1,12 @@
 <template>
-    <my-page class="page-home" title="地图定位" :containerPadding="false">
-        <div class="input-box">
-            <input class="input" v-model="location" placeholder="116.404,39.915">
-            <ui-icon-button class="btn" icon="send" @click="gotoLocation" />
+    <my-page class="page-home" title="地图定位" :page="page" :containerPadding="false">
+        <div class="common-container container">
+            <div class="input-box">
+                <input class="input" v-model="location" placeholder="116.404,39.915">
+                <ui-icon-button class="btn" icon="send" @click="gotoLocation" />
+            </div>
+            <div class="map" id="container"></div>
         </div>
-        <div class="map" id="container"></div>
     </my-page>
 </template>
 
@@ -21,7 +23,9 @@
                         {
                             type: 'icon',
                             icon: 'help',
-                            to: '/help'
+                            href: 'https://project.yunser.com/products/5d1c4de05dc411e99da1c5fddb71d576',
+                            target: '_blank',
+                            title: '帮助'
                         }
                     ]
                 }
@@ -107,10 +111,13 @@
 </script>
 
 <style lang="scss" scoped>
+.container {
+    // position: relative;
+}
 .input-box {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 80px;
+    right: 16px;
     z-index: 100000;
     width: 240px;
     height: 48px;

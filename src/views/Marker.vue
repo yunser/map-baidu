@@ -1,24 +1,26 @@
 <template>
-    <my-page class="page-home" title="位置标记" :containerPadding="false">
-        <div class="input-box">
-            <div v-if="mode">
-                <ui-text-field v-model="longitude" label="经度" />
-                <br>
-                <ui-text-field v-model="latitude" label="纬度" />
-                <br>
-                <ui-raised-button class="btn" primary label="添加" @click="add" />
-                <a href="#" @click.prevent="changeMode">批量添加</a>
+    <my-page class="page-home" title="位置标记" :page="page" :containerPadding="false">
+        <div class="common-container container">
+            <div class="input-box">
+                <div v-if="mode">
+                    <ui-text-field v-model="longitude" label="经度" />
+                    <br>
+                    <ui-text-field v-model="latitude" label="纬度" />
+                    <br>
+                    <ui-raised-button class="btn" primary label="添加" @click="add" />
+                    <a href="#" @click.prevent="changeMode">批量添加</a>
+                </div>
+                <div v-if="!mode">
+                    <ui-text-field v-model="locations" hintText="多行输入" label="经纬度" multiLine :rows="3" :rowsMax="6" />
+                    <br>
+                    <ui-raised-button class="btn" primary label="批量添加" @click="addMuch" />
+                    <a href="#" @click.prevent="changeMode">单个添加</a>
+                </div>
             </div>
-            <div v-if="!mode">
-                <ui-text-field v-model="locations" hintText="多行输入" label="经纬度" multiLine :rows="3" :rowsMax="6" />
-                <br>
-                <ui-raised-button class="btn" primary label="批量添加" @click="addMuch" />
-                <a href="#" @click.prevent="changeMode">单个添加</a>
-            </div>
+            <div class="map" id="container"></div>
+            <!-- <ui-float-button class="float-button" icon="add"/> -->
+            <!-- <a href="#" @click.prevent="changeMode">批量添加</a> -->
         </div>
-        <div class="map" id="container"></div>
-        <!-- <ui-float-button class="float-button" icon="add"/> -->
-        <!-- <a href="#" @click.prevent="changeMode">批量添加</a> -->
     </my-page>
 </template>
 
@@ -39,7 +41,9 @@
                         {
                             type: 'icon',
                             icon: 'help',
-                            to: '/help'
+                            href: 'https://project.yunser.com/products/7880b7405dc611e99da1c5fddb71d576',
+                            target: '_blank',
+                            title: '帮助'
                         }
                     ]
                 }
@@ -150,8 +154,8 @@
 <style lang="scss" scoped>
 .input-box {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 80px;
+    right: 16px;
     z-index: 100000;
     // width: 240px;
     // height: 48px;

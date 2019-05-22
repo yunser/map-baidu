@@ -1,5 +1,5 @@
 <template>
-    <my-page title="距离测量">
+    <my-page title="距离测量" :page="page">
         <div class="map" id="container"></div>
         <!-- <div class="location">{{ location }}</div> -->
         <div id="panel"></div>
@@ -24,10 +24,17 @@
                     menu: [
                         {
                             type: 'icon',
-                            icon: 'clear_all',
-                            click: this.clear,
-                            title: '清空'
+                            icon: 'help',
+                            href: 'https://project.yunser.com/products/04221b905dc711e99da1c5fddb71d576',
+                            target: '_blank',
+                            title: '帮助'
                         }
+                        // {
+                        //     type: 'icon',
+                        //     icon: 'clear_all',
+                        //     click: this.clear,
+                        //     title: '清空'
+                        // }
                     ]
                 }
             }
@@ -128,8 +135,8 @@
 }
 .input-box {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 80px;
+    right: 16px;
     z-index: 100000;
     width: 240px;
     height: 48px;

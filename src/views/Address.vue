@@ -1,45 +1,47 @@
 <template>
-    <my-page title="地址解析">
-        <ui-text-field v-model="addresses" label="地址" multiLine :rows="3" :rowsMax="6" hintText="" />
-        <br>
-        <ui-select-field class="select" v-model="coordType" label="坐标系">
-            <ui-menu-item value="wgs84" title="wgs84 坐标"/>
-            <ui-menu-item value="gcj02" title="国测局坐标"/>
-            <ui-menu-item value="bd09" title="百度坐标"/>
-        </ui-select-field>
-        <br>
-        <!-- <span>四舍五入保留</span>
-        <ui-text-field class="fixed-input" type="number" v-model.number="fixedNumber" />
-        <span>位</span> -->
-        <div class="btns">
-            <ui-raised-button class="btn" primary label="解析" @click="convert" />
-            <ui-raised-button class="btn" label="清空" @click="clear" />
-        </div>
-        <ui-article class="result" v-if="results.length">
-            <table>
-                <tr>
-                    <th>地址</th>
-                    <th>经度</th>
-                    <th>纬度</th>
-                    <th>坐标系</th>
-                    <th>省</th>
-                    <th>市</th>
-                    <th>区</th>
-                </tr>
-                <tr v-for="item in results">
-                    <td>{{ item.address }}</td>
-                    <td>{{ item.longitude }}</td>
-                    <td>{{ item.latitude }}</td>
-                    <td>WGS-84</td>
-                    <td>{{ item.province }}</td>
-                    <td>{{ item.city }}</td>
-                    <td>{{ item.district }}</td>
-                </tr>
-            </table>
-        </ui-article>
-        <div class="btns" v-if="results.length">
-            <ui-raised-button class="btn" primary label="导出为 CVS" @click="exportTable" />
-            <ui-raised-button class="btn" secondary label="仅导出经纬度" @click="exportCoord" />
+    <my-page title="地址解析" :page="page">
+        <div class="common-container container">
+            <ui-text-field v-model="addresses" label="地址" multiLine :rows="3" :rowsMax="6" hintText="" />
+            <br>
+            <ui-select-field class="select" v-model="coordType" label="坐标系">
+                <ui-menu-item value="wgs84" title="wgs84 坐标"/>
+                <ui-menu-item value="gcj02" title="国测局坐标"/>
+                <ui-menu-item value="bd09" title="百度坐标"/>
+            </ui-select-field>
+            <br>
+            <!-- <span>四舍五入保留</span>
+            <ui-text-field class="fixed-input" type="number" v-model.number="fixedNumber" />
+            <span>位</span> -->
+            <div class="btns">
+                <ui-raised-button class="btn" primary label="解析" @click="convert" />
+                <ui-raised-button class="btn" label="清空" @click="clear" />
+            </div>
+            <ui-article class="result" v-if="results.length">
+                <table>
+                    <tr>
+                        <th>地址</th>
+                        <th>经度</th>
+                        <th>纬度</th>
+                        <th>坐标系</th>
+                        <th>省</th>
+                        <th>市</th>
+                        <th>区</th>
+                    </tr>
+                    <tr v-for="item in results">
+                        <td>{{ item.address }}</td>
+                        <td>{{ item.longitude }}</td>
+                        <td>{{ item.latitude }}</td>
+                        <td>WGS-84</td>
+                        <td>{{ item.province }}</td>
+                        <td>{{ item.city }}</td>
+                        <td>{{ item.district }}</td>
+                    </tr>
+                </table>
+            </ui-article>
+            <div class="btns" v-if="results.length">
+                <ui-raised-button class="btn" primary label="导出为 CVS" @click="exportTable" />
+                <ui-raised-button class="btn" secondary label="仅导出经纬度" @click="exportCoord" />
+            </div>
         </div>
     </my-page>
 </template>
@@ -62,7 +64,9 @@
                         {
                             type: 'icon',
                             icon: 'help',
-                            to: '/help'
+                            href: 'https://project.yunser.com/products/0f6d4d405dc611e99da1c5fddb71d576',
+                            target: '_blank',
+                            title: '帮助'
                         }
                     ]
                 }
@@ -148,6 +152,9 @@
 </script>
 
 <style lang="scss" scoped>
+.container {
+    max-width: 400px;
+}
 .select {
     width: 130px;
 }
