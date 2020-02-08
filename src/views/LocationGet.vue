@@ -9,6 +9,22 @@
                 <ui-icon-button class="btn" icon="search" @click="search" />
             </div>
         </div>
+        <ui-drawer right :open="settingVisible" :docked="false" @close="toggleSetting()">
+            <ui-appbar title="设置">
+                <ui-icon-button icon="close" slot="left" @click="toggleSetting" />
+            </ui-appbar>
+            <div class="body">
+                 <ui-select-field class="select" v-model="form.coordType" label="坐标系">
+                    <ui-menu-item value="wgs84" title="wgs84 坐标"/>
+                    <ui-menu-item value="gcj02" title="国测局坐标"/>
+                    <ui-menu-item value="bd09" title="百度坐标"/>
+                </ui-select-field> 
+                
+                <span>四舍五入保留</span>
+                <ui-text-field class="fixed-input" type="number" v-model.number="form.fixedNumber" />
+                <span>位</span>
+            </div>
+        </ui-drawer>
     </my-page>
 </template>
 
@@ -21,10 +37,23 @@
     export default {
         data () {
             return {
+                form: {
+                    coordType: 'wgs84',
+                    fixedNumber: 6,
+                },
+                settingVisible: false,
                 keyword: '',
                 location: '1,2',
                 page: {
                     menu: [
+                        {
+                            type: 'icon',
+                            icon: 'settings',
+                            click: this.toggleSetting,
+                            // href: 'https://project.yunser.com/products/cdaa52305dc611e99da1c5fddb71d576',
+                            // target: '_blank',
+                            // title: '帮助'
+                        },
                         {
                             type: 'icon',
                             icon: 'help',
@@ -39,6 +68,7 @@
         computed: {
         },
         mounted() {
+            window.toggleSetting = this.toggleSetting
             this.map = new AMap.Map('container', {
                 zoom: 11,
                 center: [116.397428, 39.90923],
@@ -48,7 +78,7 @@
             // 加载定位插件
             this.map.plugin('AMap.Geolocation', function() {
                 // 初始化定位插件
-                geolocation = new AMap.Geolocation({
+                let geolocation = new AMap.Geolocation({
                     enableHighAccuracy: true, //是否使用高精度定位，默认:true
                     timeout: 10000, //超过10秒后停止定位，默认：无穷大
                     maximumAge: 0, //定位结果缓存0毫秒，默认：0
@@ -88,12 +118,27 @@
                 })
                 this.map.add(this.marker)
 
+                let showLng
+                let showLat
+                if (this.form.coordType === 'wgs84') {
+                    showLng = wgs84[0]
+                    showLat = wgs84[1]
+                } else if (this.form.coordType === 'gcj02') {
+                    showLng = longitude
+                    showLat = latitude
+                } else {
+                    showLng = baidu[0]
+                    showLat = baidu[1]
+                }
+                showLng = showLng.toFixed(this.form.fixedNumber)
+                showLat = showLat.toFixed(this.form.fixedNumber)
+
                 var infoWindow = new AMap.InfoWindow({
                     isCustom: true,
                     content: `<div class="info-box">
-<p>国测局坐标：${longitude}，${latitude}（火星坐标、腾讯地图坐标、高德地图坐标）</p>
-<p>国际坐标：${wgs84[0]}，${wgs84[1]}（wgs84 坐标、谷歌地球坐标）</p>
-<p>百度地图坐标：${baidu[0]}，${baidu[1]}（wgs84 坐标、谷歌地球坐标）</p>
+<p>${showLng}, ${showLat}</p>
+
+<div onclick="window.toggleSetting()">设置</div>
 
 <div class="close" onclick="window.infoWindow.close()">×</div>
 </div>`,
@@ -130,12 +175,18 @@
             this.map.destroy()
         },
         methods: {
+            toggleSetting() {
+                this.settingVisible = !this.settingVisible
+            }
         }
     }
 </script>
 
 <style lang="scss" scoped>
 @import '../scss/var';
+.body {
+    padding: 16px;
+}
 .container {
     // position: relative;
 }
@@ -192,5 +243,8 @@
         top: 0;
         right: 0;
     }
+}
+.fixed-input {
+    width: 148px;
 }
 </style>

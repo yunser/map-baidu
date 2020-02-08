@@ -3,10 +3,10 @@
         <div class="common-container container">
             <ui-text-field v-model="addresses" label="地址" multiLine :rows="3" :rowsMax="6" hintText="" />
             <br>
-            <ui-select-field class="select" v-model="coordType" label="坐标系">
-                <ui-menu-item value="wgs84" title="wgs84 坐标"/>
-                <ui-menu-item value="gcj02" title="国测局坐标"/>
-                <ui-menu-item value="bd09" title="百度坐标"/>
+            <ui-select-field class="select" v-model="coordType" label="导出数据的坐标系">
+                <ui-menu-item value="wgs84" title="WGS-84"/>
+                <ui-menu-item value="gcj02" title="GCJ-02"/>
+                <ui-menu-item value="bd09" title="BD-09"/>
             </ui-select-field>
             <br>
             <!-- <span>四舍五入保留</span>
@@ -14,34 +14,46 @@
             <span>位</span> -->
             <div class="btns">
                 <ui-raised-button class="btn" primary label="解析" @click="convert" />
-                <ui-raised-button class="btn" label="清空" @click="clear" />
+                <ui-raised-button class="btn" label="重置" @click="reset" />
+                <ui-raised-button class="btn" label="清空结果" @click="clear" />
+            </div>
+            <div class="btns" v-if="results.length">
+                <ui-raised-button class="btn" label="导出为 CVS" @click="exportTable" />
+                <ui-raised-button class="btn" label="导出为 JSON" @click="exportJson" />
+                <ui-raised-button class="btn" label="仅导出经纬度" @click="exportCoord" />
             </div>
             <ui-article class="result" v-if="results.length">
-                <table>
-                    <tr>
-                        <th>地址</th>
-                        <th>经度</th>
-                        <th>纬度</th>
-                        <th>坐标系</th>
-                        <th>省</th>
-                        <th>市</th>
-                        <th>区</th>
-                    </tr>
-                    <tr v-for="item in results">
-                        <td>{{ item.address }}</td>
-                        <td>{{ item.longitude }}</td>
-                        <td>{{ item.latitude }}</td>
-                        <td>WGS-84</td>
-                        <td>{{ item.province }}</td>
-                        <td>{{ item.city }}</td>
-                        <td>{{ item.district }}</td>
-                    </tr>
-                </table>
+                <div class="tableBox">
+                    <table class="table">
+                        <tr>
+                            <th>地址</th>
+                            <th>经度</th>
+                            <th>纬度</th>
+                            <th>坐标系</th>
+                            <th>省</th>
+                            <th>市</th>
+                            <th>区</th>
+                            <th>省代码</th>
+                            <th>市代码</th>
+                            <th>区代码</th>
+                            <th>完整地址</th>
+                        </tr>
+                        <tr v-for="item in results">
+                            <td>{{ item.address }}</td>
+                            <td>{{ item.longitude }}</td>
+                            <td>{{ item.latitude }}</td>
+                            <td>{{ item.coordType }}</td>
+                            <td>{{ item.province }}</td>
+                            <td>{{ item.city }}</td>
+                            <td>{{ item.district }}</td>
+                            <td>{{ item.provinceCode }}</td>
+                            <td>{{ item.cityCode }}</td>
+                            <td>{{ item.areaCode }}</td>
+                            <td>{{ item.formattedAddress }}</td>
+                        </tr>
+                    </table>
+                </div>
             </ui-article>
-            <div class="btns" v-if="results.length">
-                <ui-raised-button class="btn" primary label="导出为 CVS" @click="exportTable" />
-                <ui-raised-button class="btn" secondary label="仅导出经纬度" @click="exportCoord" />
-            </div>
         </div>
     </my-page>
 </template>
@@ -61,13 +73,20 @@
                 results: [],
                 page: {
                     menu: [
+                        // {
+                        //     type: 'icon',
+                        //     icon: 'settings',
+                        //     href: 'https://project.yunser.com/products/0f6d4d405dc611e99da1c5fddb71d576',
+                        //     target: '_blank',
+                        //     title: '帮助'
+                        // },
                         {
                             type: 'icon',
                             icon: 'help',
                             href: 'https://project.yunser.com/products/0f6d4d405dc611e99da1c5fddb71d576',
                             target: '_blank',
                             title: '帮助'
-                        }
+                        },
                     ]
                 }
             }
@@ -76,8 +95,12 @@
             // this.from = 'bd09'
             // this.to = 'wgs84'
             // this.convert()
+            this.debug()
         },
         methods: {
+            debug() {
+                this.convert()
+            },
             convert() {
                 if (!this.addresses) {
                     this.$message({
@@ -91,7 +114,7 @@
                     let geocoder = new AMap.Geocoder({
                         // city: '010'
                     })
-                    let addresses = this.addresses.split('\n')
+                    let addresses = this.addresses.split('\n').reverse()
                     for (let address of addresses) {
                         geocoder.getLocation(address, (status, result) => {
                             if (status === 'complete' && result.info === 'OK') {
@@ -107,7 +130,21 @@
                                     if (this.coordType === 'bd09') {
                                         coord = coordtransform.gcj02tobd09(item.location.lng, item.location.lat)
                                     }
+                                    function findIndex(address) {
+                                        for (let i = 0; i < addresses.length; i++) {
+                                            if (addresses[i] === address) {
+                                                return i
+                                            }
+                                        }
+                                        return -1
+                                    }
+                                    let coordTypes = {
+                                        'wgs84': 'WGS-84',
+                                        'gcj02': 'GCJ-02',
+                                        'bd09': 'BD-09',
+                                    }
                                     this.results.push({
+                                        coordType: coordTypes[this.coordType],
                                         address: address,
                                         longitude: coord[0],
                                         latitude: coord[1],
@@ -115,22 +152,42 @@
                                         city: item.addressComponent.city,
                                         district: item.addressComponent.district,
                                         formattedAddress: item.formattedAddress,
+                                        areaCode: item.adcode,
+                                        cityCode: item.adcode.substring(0, 4) + '00',
+                                        provinceCode: item.adcode.substring(0, 2) + '0000',
+                                        index: findIndex(address)
                                     })
+                                    this.sortByOld()
                                 }
                             }
                         })
                     }
                 })
             },
+            sortByOld() {
+                console.log('this.results', this.results)
+                this.results = this.results.sort((a, b) => {
+                    return b.index - a.index
+                })
+            },
+            reset() {
+                this.addresses = ''
+                // this.coordType = 'wgs84'
+            },
             clear() {
                 this.results = []
             },
             getDataArr() {
                 let data = []
-                data[0] = ['地址', '经度', '纬度', '坐标系', '省', '市', '区']
+                data[0] = ['地址', '经度', '纬度', '坐标系', '省', '市', '区', '省代码', '市代码', '区代码', '完整地址']
                 for (let item of this.results) {
-                    data.push([item.address, item.longitude, item.latitude, 'WGS-84', item.province,
-                        item.city, item.district])
+                    data.push([
+                        item.address,
+                        item.longitude, item.latitude, item.coordType,
+                        item.province, item.city, item.district,
+                        item.provinceCode, item.cityCode, item.areaCode,
+                        item.formattedAddress
+                    ])
                 }
                 return data
             },
@@ -138,6 +195,30 @@
                 let data = this.getDataArr()
                 let blob = new Blob([cvsExport(data)], {type: 'text/plain;charset=utf-8'})
                 saveAs(blob, 'data.csv')
+            },
+            exportJson() {
+                let data = this.getDataArr()
+                let arr = []
+                for (let i = 0; i < data.length; i++) {
+                    if (i === 0) {
+                        continue
+                    }
+                    let item = data[i]
+                   arr.push({
+                       address: item[0],
+                       longitude: item[1],
+                       latitude: item[2],
+                       type: item[3],
+                       province: item[4],
+                       city: item[5],
+                       area: item[6],
+                   })
+                   console.log('arr', arr)
+                }
+                console.log('JSON', JSON.stringify(arr, null, 4))
+                let json = JSON.stringify(arr, null, 4)
+                let blob = new Blob([json], {type: 'text/plain;charset=utf-8'})
+                saveAs(blob, 'data.json')
             },
             exportCoord() {
                 let data = this.getDataArr()
@@ -153,7 +234,16 @@
 
 <style lang="scss" scoped>
 .container {
-    max-width: 400px;
+    max-width: 100%;
+    // max-width: 400px;
+}
+.tableBox {
+    border: 1px solid #000;
+    overflow: auto;
+    .table {
+        margin-bottom: 0;
+        width: 1400px;
+    }
 }
 .select {
     width: 130px;

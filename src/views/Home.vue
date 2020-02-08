@@ -7,6 +7,7 @@
 </template>
 
 <script>
+    /* eslint-disable */
     export default {
         data () {
             return {
@@ -15,22 +16,16 @@
                         name: '基本',
                         apps: [
                             {
+                                name: '地图',
+                                desc: '',
+                                icon: '/static/img/map_location.svg',
+                                to: '/map'
+                            },
+                            {
                                 name: '地图定位',
                                 desc: '',
                                 icon: '/static/img/map_location.svg',
                                 to: '/location'
-                            },
-                            {
-                                name: '坐标转换',
-                                desc: '',
-                                icon: '/static/img/map_location_convert.svg',
-                                to: '/convert'
-                            },
-                            {
-                                name: '地址解析',
-                                desc: '',
-                                icon: '/static/img/map_location.svg',
-                                to: '/address'
                             },
                             {
                                 name: '位置标记',
@@ -50,6 +45,58 @@
                                 icon: '/static/img/map_location.svg',
                                 to: '/location_get'
                             },
+                            
+                            // {
+                            //     name: '广州新冠病例分布',
+                            //     desc: '',
+                            //     icon: '/static/img/map_area.svg',
+                            //     to: '/locations/deving'
+                            // },
+                        ]
+                    },
+                    {
+                        name: '转换',
+                        apps: [
+                            {
+                                name: '坐标转换',
+                                desc: '',
+                                icon: '/static/img/map_location_convert.svg',
+                                to: '/convert'
+                            },
+                            {
+                                name: '地址解析',
+                                desc: '',
+                                icon: '/static/img/map_location_convert.svg',
+                                to: '/address'
+                            },
+                            {
+                                name: '经纬度解析',
+                                desc: '',
+                                icon: '/static/img/map_location_convert.svg',
+                                to: '/convert/coord'
+                            },
+                        ]
+                    },
+                    {
+                        name: '工具',
+                        apps: [
+                            {
+                                name: '我的位置',
+                                desc: '',
+                                icon: '/static/img/map_area.svg',
+                                to: '/myLocation'
+                            },
+                            {
+                                name: '你在哪',
+                                desc: '',
+                                icon: '/static/img/map_area.svg',
+                                to: '/whereAreYou'
+                            },
+                        ]
+                    },
+                    {
+                        name: '测量',
+                        apps: [
                             {
                                 name: '距离测量',
                                 desc: '',
@@ -61,11 +108,11 @@
                                 desc: '',
                                 icon: '/static/img/map_area.svg',
                                 to: '/area'
-                            }
+                            },
                         ]
                     },
                     {
-                        name: '没卵用',
+                        name: '没什么用',
                         apps: [
                             {
                                 name: '百度地图坐标拾取',
