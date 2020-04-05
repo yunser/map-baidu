@@ -32,6 +32,38 @@
     /* eslint-disable */
     let coordtransform = require('coordtransform')
 
+ //墨卡托转经纬度
+    function webMercator2lonLat(mercator) {
+        var lonlat={x:0,y:0};
+        var x=mercator.x/20037508.34*180;
+        var y=mercator.y/20037508.34*180;
+        y=180/Math.PI *(2*Math.atan(Math.exp(y*Math.PI/180))-Math.PI/2);
+        lonlat.x=x;
+        lonlat.y=parseFloat(y.toFixed(4));
+        return lonlat;
+    }
+ 
+    //经纬度转墨卡托
+    function lonlat2mercattor(lonlat) {
+        var  mercator={x:0,y:0};
+        var x = lonlat.x *20037508.34/180;
+        var y = Math.log(Math.tan((90+lonlat.y)*Math.PI/360))/(Math.PI/180);
+        y = y *20037508.34/180;
+        mercator.x = x;
+        mercator.y = y;
+        return mercator ;
+    }
+
+    //调用方式
+    var lonlat={x:114.1475,y: 22.6092};
+        console.log(lonlat2mercattor(lonlat));
+ 
+        var mercator={x:12706841.57355639,y:2584825.9064387};
+        console.log(lonlat2mercattor({
+            x: 112.968588,
+            y: 22.520978
+        }))
+        
     export default {
         data () {
             return {

@@ -50,6 +50,12 @@
                         </tr>
                     </table>
                 </ui-article>
+
+                <ul class="list">
+                    <li class="item" v-for="item in results">
+                        {{ item }}
+                    </li>
+                </ul>
             </div>
             <div v-else>
                 你的浏览器不支持这个功能
@@ -73,6 +79,10 @@
                 },
                 error: '',
                 result: '',
+                results: [
+                    // '1',
+                    // '2',
+                ],
                 loading: false,
                 isAble: false,
                 page: {
@@ -114,7 +124,7 @@
                     latitude: 24,
                 }
             },
-            getMyLocation() {
+            getMyLocation(callback) {
                 this.loading = true
                 console.log('获取坐标')
                 navigator.geolocation.getCurrentPosition(position => {
@@ -138,6 +148,7 @@
                         text: `你的坐标：${lng}, ${lat}`,
                         debug: JSON.stringify(position)
                     }
+                    callback && callback(this.result)
                 }, error => {
                     console.log('error', error)
                     this.loading = false
@@ -159,7 +170,9 @@
                 })
             },
             add() {
-                
+                this.getMyLocation(data => {
+                    this.results.push(`${data.longitude}, ${data.latitude}`)
+                })
             },
         }
     }
