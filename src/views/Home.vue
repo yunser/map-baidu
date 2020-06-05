@@ -112,22 +112,14 @@
                         ]
                     },
                     {
-                        name: '没什么用',
+                        name: '其他',
                         apps: [
                             {
-                                name: '百度地图坐标拾取',
+                                name: 'GIS',
                                 desc: '',
-                                icon: '/static/img/map_location.svg',
+                                icon: '/static/img/map_area.svg',
                                 to: 'xxx',
-                                href: 'https://demo2.yunser.com/map_baidu',
-                                target: '_blank'
-                            },
-                            {
-                                name: '腾讯地图坐标拾取',
-                                desc: '',
-                                icon: '/static/img/map_location.svg',
-                                to: 'xxx',
-                                href: 'https://demo2.yunser.com/getpoint/',
+                                href: 'https://gis.yunser.com/',
                                 target: '_blank'
                             }
                         ]
