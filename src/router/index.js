@@ -24,6 +24,8 @@ let routes = [
     { path: '/whereAreYou', component: resolve => require(['@/views/WhereAreYou'], resolve) },
     { path: '/locations/deving', component: resolve => require(['@/views/Locations'], resolve) },
     { path: '/convert/coord', component: resolve => require(['@/views/CoordConvert'], resolve) },
+    { path: '/distance/calc', component: resolve => require(['@/views/DistanceCalc'], resolve) },
+    { path: '/distance/calc2', component: resolve => require(['@/views/DistanceCalc2'], resolve) },
     {
         path: '/location',
         component: Location

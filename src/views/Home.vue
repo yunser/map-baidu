@@ -75,6 +75,18 @@
                                 icon: '/static/img/map_location_convert.svg',
                                 to: '/convert/coord'
                             },
+                            {
+                                name: '经纬度计算',
+                                desc: '',
+                                icon: '/static/img/map_distance.svg',
+                                to: '/distance/calc'
+                            },
+                            {
+                                name: '求经纬度',
+                                desc: '',
+                                icon: '/static/img/map_distance.svg',
+                                to: '/distance/calc2'
+                            },
                         ]
                     },
                     {
